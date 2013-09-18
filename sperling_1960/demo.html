@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sperling's Partial Report Procedure (1960)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+body {
+    text-align: center;
+}
+
+svg {
+  font-family: "Helvetica Neue", Helvetica;
+} 
+
+#chart {
+    margin: auto;
+}
+
+.letter {
+    font-size: 128px;
+    text-anchor: middle;
+}
+    </style>
+  </head>
+  <body>
+      <div id="chart">
+      </div>
+      <audio id="audio1" src="tone_250.wav" preload="auto" autobuffer></audio>
+      <audio id="audio2" src="tone_650.wav" preload="auto" autobuffer></audio>
+      <audio id="audio3" src="tone_2500.wav" preload="auto" autobuffer></audio>
+      <script type="text/javascript">
+
+var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    width = 1000;
+    height = 700;
+
+var x = d3.scale.linear()
+    .domain([1, 4])
+    .range([100,width-100]);
+
+var y = d3.scale.linear()
+    .domain([1,3])
+    .range([100,height-100]);
+
+var stim = 'BCDFGHJKLMNPQRSTVWXZ123456789';
+
+var tokens = generateNewArray(stim,12);
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .attr("width", width)
+    .attr("height", height);
+
+svg.selectAll('rect')
+    .data([1,2,3])
+    .enter().append('svg:rect')
+        .attr('id','cue1')
+        .attr('width',width)
+        .attr('height',128)
+        .style('fill','yellow')
+        .style('opacity',0)
+        .attr('transform',function(d,i) { return 'translate(44,'+(y(d)-64)+')'; });
+
+svg.append("svg:g")
+    .attr('id','letter-array')
+    .style('display','none')
+    .attr('transform','translate(0,0)');
+
+var letters = d3.select('#letter-array').selectAll('.letter')
+        .data(tokens);
+    letters.enter()
+        .append("svg:text")
+          .classed('letter',true)
+          .attr('x',function(d,i) { return x((i%4)+1); })
+          .attr('y',function(d,i) { return y(Math.ceil((i+1)/4)); })
+          .attr('dy','44px')
+          .text(function(d) { return d; });
+    letters.exit().remove();
+
+var count = 0;
+var cue = 0;
+
+var auditory = false;
+var visual = false;
+
+d3.select(window).on("resize", resize);
+resize()
+
+function resize() {
+  d3.select("body").style("margin-top", (window.innerHeight - 768) / 2 + "px");
+}
+
+d3.select(window).on("keydown", function() {
+    switch (d3.event.keyCode) {
+      case 39: // right arrow
+      case 32: // space
+      case 34: { // page down
+        switch (count%3) {
+          case 0:
+            cue = Math.ceil(Math.random()*3);
+            if (auditory) {
+              flashArrayWithAuditoryCue(150,cue);
+            } else if (visual) {
+              flashArrayWithVisualCue(150,cue);
+            } else {
+              flashArray(150);
+            }
+            ++count;
+            break;
+          case 1:
+            displayArray();
+            ++count;
+            break;
+          case 2:
+            hideArray();
+            setTimeout('newLetters()',250);
+            ++count;
+            break;
+        }
+        break;
+      }
+  //    case 37: // left arrow
+  //    case 33: { // page up
+  //      navigateTo(curIndex - 1);
+  //      break;
+  //    }
+  //    case 36: { // home
+  //      navigateTo(0);
+  //      break;
+  //    }
+  //    case 35: { // end
+  //      navigateTo(slides.length-1);
+   //     break;
+   //   }
+      case 49: // 1
+      case 50: // 2
+      case 51: { // 3
+         // Play tone
+         EvalSound('audio'+(d3.event.keyCode-48));
+         break;
+      }
+      case 65: { // a
+         auditory = auditory ? false : true;
+         visual = auditory ? false : visual;
+         break;
+      }
+      case 86: { // b
+         visual = visual ? false : true;
+         auditory = visual ? false : auditory;
+         break;
+      }
+    }
+      
+});
+
+function newLetters() {
+    var tokens = generateNewArray(stim,12);
+    var letters = d3.select('#letter-array').selectAll('.letter')
+        .data(tokens);
+    letters.text(function(d) { return d; });
+    
+}
+
+function generateNewArray(stim,n) {
+    var arr = []
+    var tokens = []
+    while(arr.length < n){
+      var randomnumber=Math.floor(Math.random()*(stim.length))
+      var found=false;
+      for(var i=0;i<arr.length;i++){
+        if(arr[i]==randomnumber){found=true;break}
+      }
+      if(!found){
+        tokens[arr.length] = stim[randomnumber];
+        arr[arr.length]=randomnumber;
+      }
+    }
+    return tokens;
+}
+
+function flashArray(n) {
+    d3.select('#letter-array').transition().duration(0).delay(0)
+        .style('display','block');
+
+    d3.select('#letter-array').transition().duration(0).delay(n)
+        .style('display','none');
+};
+
+function flashArrayWithAuditoryCue(n,k) {
+    d3.select('#letter-array').transition().duration(0).delay(0)
+        .style('display','block');
+
+    d3.select('#letter-array').transition().duration(0).delay(n)
+        .style('display','none')
+        .each('end',function(d,i) { EvalSound('audio'+k);});
+};
+
+function flashArrayWithVisualCue(n,k) {
+    d3.select('#letter-array').transition().duration(0).delay(0)
+        .style('display','block');
+
+    d3.select('#letter-array').transition().duration(0).delay(n)
+        .style('display','none');
+
+    d3.selectAll('rect').filter(function(d) { return d == k ? this : null; }).transition().duration(0).delay(n)
+        .style('opacity',1);
+
+    d3.selectAll('rect').filter(function(d) { return d == k ? this : null; }).transition().duration(0).delay(n+1000)
+        .style('opacity',0);
+};
+
+function displayArray() {
+    d3.select('#letter-array').transition().duration(0).delay(0)
+        .style('display','block');
+}
+
+function hideArray() {
+    d3.select('#letter-array').transition().duration(0).delay(0)
+        .style('display','none');
+}
+
+function EvalSound(soundobj){
+   var thissound=document.getElementById(soundobj);
+   thissound.play();
+}
+   
+function start() {
+    EvalSound('audio1');
+    EvalSound('audio2');
+    EvalSound('audio3');
+};
+
+
+      </script>
+  </body>
+</html>
