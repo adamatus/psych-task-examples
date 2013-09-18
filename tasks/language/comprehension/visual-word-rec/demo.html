@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Visual Word Recognition</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="../../../../css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/button.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/chart.css"/>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../../libs/progress_bar.js"></script>
+  </head>
+  <body>
+      <div id="instructions">
+          <h1>Visual Word Recognition</h1>
+          <p>During this experiment you will be presented with a collection of
+          words, one at a time. Each word will be presented visually in the
+          center of the screen. Your task is to determine, for each word, if it is the name of an animal (including mammals, birds, insects, amphibians, fish, and reptiles) or not.</p>
+          <ul>
+            <li>If the word refers to an animal, press the Right Arrow key</li>
+            <li>If the word does NOT refer to an animal, press the Left Arrow key</li>
+           </ul>
+           <p>Your response time (how quickly you can determine if each word is
+           an animal or not) will be measured while you preform the task. Please try to respond as quickly and accurately as you can.</p>
+
+           <p>After each response (or 2 seconds if you do not respond) the next word will be presented automatically.</p>
+
+           <p>A bar running along the bottom of the screen will track your
+           progress. This experiment should take about a minute and a half to
+           complete.</p>
+           <p class="begin">Press the spacebar when you are ready to begin!</p>
+      </div>
+      <div class="results">
+          <h1>Visual Word Recognition</h1>
+
+              <h2>Results and Explanation</h1>
+
+              <p>This experiment was designed to examine visual
+              word recognition, the process of recognizing individual words and
+              retrieving their meaning. In particular, it looked at whether
+              seeing a particular word leads to the partial retrieval of other
+              words that look similar, called <em>lexical neighbors</em>. If
+              this type of partial retrieval is occurring, we might expect it to
+              impact our current recognition of the word we are seeing.</p>
+
+              <p>To test this, the experiment used a <a
+                  href="http://en.wikipedia.org/wiki/Lexical_decision_task">Lexical
+                  Decision Task</a> with Animal words (e.g.,
+              'weasel'), Control words that have no animal lexical neighbors
+              (e.g., 'quest'), and Experimental words that are close lexical
+              neighbors to an animal word, differing in only one letter
+              (e.g., 'mobster' is very close to 'lobster'). If the process of
+              recognizing a word leads to partial retrieval of it's lexical
+              neighbors, we would expect the Experimental words, those only
+              one letter away from an animal, to partially activate the
+              representation for that animal, making the process of correctly
+              identifying it as <em>not</em> an animal more difficult,
+              and thus more prone to errors and slower processing time.</p>
+
+              <p>In a <a href="http://dx.doi.org/10.3758/BF03196591">2004
+              study</a>, Jennifer Rodd of the University of Cambridge found
+              exactly that.  Participants were on average slower to respond
+              (i.e., had a larger reaction time) to the Experimental words
+              (those with a close animal neighbor) than to the Control words
+              (no animal neighbors). They also made more errors (accidentally
+              calling a non-animal an animal) on Experimental words compared to
+              control words. How do you stack up?  Below you can see
+              your response time (or error rate) for each of the categories
+              of words, or you can switch to viewing the original results
+              from Rodd's study by clicking the 'Study Data' button.</p>
+
+              <p>The results from this study and others suggest that visual
+              word recognition is not as straight forward as just identifying
+              the word and looking it up in a mental dictionary. Rather, the
+              process is fuzzy, with multiple meanings being retrieved and
+              interacting and interfering with one and other.</p>
+
+              <div id="controls">
+                  <span id="who"><button class="first active">Your Data</button><button class="last">Study Data</button></span>
+                  <span id="what"><button class="first active">Response Time</button><button class="last">Errors</button></span>
+              </div>
+      </div>
+      <div id="chart">
+      </div>
+      <div class='results'>
+          <div id="controls">
+              <span id="return"><button class="first last"
+                      onclick="window.location='../#visual'">Back to Overview</button></span>
+          </div>
+      </div>
+      <script type="text/javascript">
+
+var width = window.innerWidth*.8;
+    height = window.innerHeight*.8;
+
+var margins = [100, 100, 10, 100], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([-1,2]);
+var y = d3.scale.linear().range([h, 0]).domain([400,700]);
+var yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
+var yAxisGrid = d3.svg.axis().scale(y).ticks(4).tickSize(-w).orient("right");
+
+var bar_width = 100;
+
+var expWordList = ['flu','plea','myth','gawk','crib','skulk','chirp','shred','haven','utter','cameo','horde','combat','muffin','thrash','weaver','scrimp','wizard','mitten','saloon','mobster','culture','leotard','shallow','thicken','woodwork','sterling','pleasant','earthwork'];
+var contWordList = ['imp','neon','poem','ogle','noun','preen','shunt','quest','taboo','aloud','elope','scold','random','garret','crunch','beacon','grouch','hermit','toffee','cellar','glazier','product','gunnery','scarlet','auction','blockade','friction','laughter','milestone'];
+var animalWordList = ['bee','toad','vole','crow','wasp','rhino','gecko','puppy','prawn','eagle','trout','bear','budgie','cuckoo','weasel','dolphin','spider','beetle','donkey','monkey','raccoon','penguin','sparrow','hamster','insect','cheetah','kangaroo','mosquito','butterfly'];
+
+var wordList = [];
+for (var i = 0; i < expWordList.length; i++) {
+    wordList.push({'word':expWordList[i],'type':'experimental','resp':-1});
+    wordList.push({'word':contWordList[i],'type':'control','resp':-1});
+    wordList.push({'word':animalWordList[i],'type':'animal','resp':1});
+}
+
+wordList = shuffle(wordList);
+//wordList = wordList.slice(0,20);
+
+var trial = 0;
+var resps = [];
+var rts = [];
+
+var iti = 565;
+var fix_dur = 500;
+var word_dur = 2000;
+
+var started = false;
+var waiting_resp = false;
+var start, end;
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .style('display','none')
+    .attr("width", width)
+    .attr("height", height);
+
+var fix = svg.append('svg:text')
+    .attr('id','fix')
+    .style('opacity',0)
+    .style('font-size',(height*.1)+'px')
+    .text("+")
+    .attr('transform','translate('+(width*.5)+','+(height*.5)+')');
+
+var word = svg.append('svg:text')
+    .attr('id','word')
+    .style('opacity',0)
+    .style('font-size',(height*.1)+'px')
+    .text("word")
+    .attr('transform','translate('+(width*.5)+','+(height*.5)+')');
+
+add_progress();
+
+d3.select(window).on("keydown", function() {
+        // TODO - Don't respond to non-task relevant key-presses!
+            
+        switch (d3.event.keyCode) {
+          case 27: // Escape
+            trial = 1000;
+            waitin_resp = false;
+            resp = -111;
+            break;
+          case 32: // space
+            resp = 0;
+            break;
+          case 37: // left
+            resp = -1;
+            end = new Date().getTime() - start;
+            break;
+          case 39: // right
+            end = new Date().getTime() - start;
+            resp = 1;
+            break;
+          default:
+            resp = -999;
+            end = -999;
+        }
+
+        if (resp != -999) {
+            fix.transition().delay(0).duration(0).style('opacity',0);
+            d3.select('#word').transition().delay(0).duration(0).style('opacity',0);
+            if (waiting_resp) {
+                resps.push(resp);
+                rts.push(end);
+            }
+
+            if (trial < wordList.length)
+            {
+                advance();
+            } else {
+                theEnd();
+            }
+        }
+});
+
+function advance() {
+        if (!started) {
+            d3.select('#instructions').transition().duration(0).style('display','none');
+            d3.select('svg').transition().duration(0).style('display','inline');
+            started = true;
+        }
+
+        move_progress(trial,wordList.length);
+   
+        fix.transition().delay(iti).duration(0).style('opacity',1)
+           .transition().delay(iti+fix_dur).duration(0).style('opacity',0)
+               .each('end',function(d) { waiting_resp = true;});
+
+        // Wrap this in a time out so we don't see the text chance upon response
+        setTimeout(function() {
+            d3.select('#word').text(wordList[trial++].word)
+                .transition().delay(fix_dur).duration(0).style('opacity',1)
+                    .each('end',function(d) { start = new Date().getTime();})
+                .transition().delay(fix_dur+word_dur).duration(0).style('opacity',0)
+                    .each('end',function(d) { waiting_resp = false;
+                        resps.push(-99); rts.push(-1); if (trial <
+                            wordList.length) { advance();}else{theEnd();} });
+            },iti);
+}
+
+var who = 'Subject';
+var what = 'RT';
+
+function theEnd() {
+    d3.select('#instructions').transition().duration(0).style('display','none');
+    d3.select('svg').transition().duration(0).style('display','inline');
+    computeStats();
+    remove_progress();
+    plotResults();
+
+    if (location.hash.substring(1)==='results') { 
+            who = 'Group';
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == 'Group'; })
+    }
+}
+
+// Results plotting
+
+var group_rts = [681,610];
+var group_errors = [8.2,4.5];
+var subj_rts = [0,0];
+var subj_errors = [100,100];
+
+
+function computeStats() {
+   types = ['experimental','control'];
+   mean_rts = [];
+   mean_errors = [];
+   for (var i = 0; i < types.length; i++)
+    {
+        var tmp_rts = [];
+        var tmp_errors = [];
+        for (var j = 0; j < rts.length; j++)
+        {
+            if (wordList[j].type == types[i]) {
+                tmp_errors.push(wordList[j].resp==resps[j] ? 0 : 1);
+                tmp_rts.push(rts[j]);
+            }
+        }
+        mean_rts.push(mean(tmp_rts));
+        mean_errors.push(mean(tmp_errors)*100);
+    }
+    subj_rts = mean_rts;
+    subj_errors = mean_errors;
+}
+
+function plotResults() {
+    d3.selectAll('.results').style('display','block');
+
+    var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+    var groups = ['Experimental','Control'];
+    var groups_e = ['E.g.: "mobster"','E.g.: "quest"'];
+    var groups_d = ['(Has Animal Neighbor)','(No Animal Neighbor)'];
+
+    y.domain([d3.min(subj_rts)*.8,d3.max(subj_rts)*1.2]);
+
+    plot.append("g")
+          .attr("class", "y grid")
+          .attr('transform','translate('+w+',0)')
+          .call(yAxisGrid);
+
+    plot.append('g').attr('id','data-bars');
+
+    plot.select('#data-bars').selectAll('.bars').data(subj_rts).enter().append('svg:rect')
+                .classed('bars',true)
+                .attr('width',bar_width)
+                .attr('height',function(d) { return h-y(d); })
+                .attr('x',function(d,i) { return x(i)-(bar_width/2); })
+                .attr('y',function(d) { return y(d); });
+
+    plot.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab')
+        .text('Mean Response Time (ms)').style('text-anchor','middle')
+        .attr('transform','translate(-85,'+(h/2)+') rotate(-90)');
+
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab2')
+        .text('<-- Faster ---|--- Slower -->').style('text-anchor','middle')
+        .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+    plot.append("g")
+          .attr("class", "x axis")
+          .append('svg:line')
+            .attr('x2',w)
+            .attr('y1',h)
+            .attr('y2',h);
+
+    plot.select('.x.axis').append('svg:text')
+        .text('Word Category').style('text-anchor','middle')
+        .attr('transform','translate('+(w/2)+','+(h+90)+') ');
+
+    plot.select('g.x.axis').selectAll('g.c1').data(groups).enter().append('svg:g')
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',18)
+            .attr('dy',7);
+
+    plot.select('g.x.axis').selectAll('g.c2').data(groups_e).enter().append('svg:g')
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+            .style('font-style','italic')
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',18)
+            .attr('dy',27);
+
+    plot.select('g.x.axis').selectAll('g.c3').data(groups_d).enter().append('svg:g')
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',18)
+            .attr('dy',47);
+
+    d3.selectAll("#who button")
+        .data(['Subject','Group'])
+        .on("click",function(w) {
+            who = w;
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == w; })
+        });
+
+    d3.selectAll("#what button")
+        .data(['RT','Errors'])
+        .on("click",function(w) {
+            what = w;
+            redraw(who,what);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == w; })
+        });
+}
+
+var ylab = 'Mean Response Time (ms)';
+var ylab2 = '<-- Faster ---|--- Slower -->';
+
+function redraw(who,what) {
+
+    var prevYlab = ylab;
+    var prevYlab2 = ylab2;
+    if (what == 'RT') {
+        var data = who == "Subject" ? subj_rts : group_rts;
+        ylab = 'Mean Response Time (ms)';
+        ylab2 = '<-- Faster ---|--- Slower -->';
+    } else {
+        var data = who == "Subject" ? subj_errors : group_errors;
+        ylab = 'Mean Percent Error';
+        ylab2 = '<-- Fewer ---|--- More -->';
+    }
+
+    y.domain([d3.min(data)*.8,d3.max(data)*1.2]);
+    var plot = d3.select('#plot');
+
+    plot.selectAll('.bars')
+        .data(data)
+      .transition()
+            .duration(1000)
+            .attr('height',function(d) { return h-y(d); })
+            .attr('x',function(d,i) { return x(i)-(bar_width/2); })
+            .attr('y',function(d) { return y(d); });
+
+    plot.select('.y.axis').transition().duration(1000).call(yAxis);
+    plot.select('.y.grid').transition().duration(1000).call(yAxisGrid);
+    if (prevYlab != ylab) {
+        plot.select('#ylab').transition().duration(500).style('opacity',0);
+        plot.select('#ylab2').transition().duration(500).style('opacity',0);
+        setTimeout( function() { plot.select('#ylab').text(ylab).transition().duration(500).style('opacity',1);},500);
+        setTimeout( function() { plot.select('#ylab2').text(ylab2).transition().duration(500).style('opacity',1);},500);
+    }
+
+}
+
+
+function mean(array)
+{
+ var sum = 0, i;
+ for (i = 0; i < array.length; i++)
+ {
+  sum += array[i];
+ }
+  return array.length ? sum / array.length : 0;
+}
+
+function shuffle(array) {
+    var n = array.length, k, t;
+    if (n == 0) return false;
+    while (--n) {
+        k = Math.floor(Math.random() * (n+1));
+        t = array[n];
+        array[n] = array[k];
+        array[k] = t;
+    }
+    return array;
+}
+
+if (location.hash.substring(1)==='results') { 
+    theEnd();
+}
+      </script>
+  </body>
+</html>

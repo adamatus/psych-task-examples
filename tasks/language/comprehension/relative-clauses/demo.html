@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Understanding Relative Clauses</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="../../../../css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/button.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/chart.css"/>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../../libs/progress_bar.js"></script>
+  </head>
+  <body>
+      <div id="instructions">
+          <h1>Understanding Relative Clauses</h1>
+          <p>During this experiment you will be visually presented with a series
+          of sentences, one at a time. Initially, all of the words in the
+          sentence will be replaced by dashes. By pressing the spacebar, you
+          will reveal one word at a time in the sentence. Your task is to read
+          each sentence as quickly as you can while ensuring you understand the
+          sentence. After you have finished reading the sentence, you will be
+          asked a 'Yes' or 'No' question that asks something about
+          the sentence.</p>
+          <ul>
+            <li>Press spacebar to reveal each word in the sentence so you can
+            read it</li>
+            <li>Click 'Yes' or 'No' to answer the question about the sentence</li>
+           </ul>
+           <p>We will be measuring your reading time (how quickly you read each
+           word) while you preform the task, so please try to read quickly, but
+           make sure you understand the sentence.</p>
+
+           <p>A bar running along the bottom of the screen will track your
+           progress. This experiment should take about three minutes to
+           complete.</p>
+
+           <p class="begin">Press the spacebar when you are ready to begin!</p>
+      </div>
+      <div class="results">
+          <h1>Understanding Relative Clauses</h1>
+
+              <h2>Results and Explanation</h1>
+
+
+              <p>This experiment was designed to examine sentence
+              comprehension, the process of understanding the meaning of an
+              entire sentence. In particular, it looked at the processing
+              <a href="http://en.wikipedia.org/wiki/Relative_clause">relative
+                  clauses</a>, and why some appear to be more difficult than
+              others.</p>
+
+              <p>To test this, the experiment used a <a
+                  href="http://fordyce.inf.ed.ac.uk/release/demos/self-paced-reading-info.html">self-paced
+                  reading</a> task. During this task participants read sentences
+              one word at a time. By varying the sentences, we can investigate
+              how different syntactic structures affects the reading times for
+              different parts of the sentence. In the case of relative clauses,
+              we can compare two different types of relative clauses, those that
+              are subject relative (e.g., the reporter <em>that attacked the
+                  senator</em> admitted the error) to those that are object
+              relative (e.g., the reporter <em>that the senator attacked</em>
+              admitted the error). In general, object relative clauses are
+              harder to comprehend, possibly because they are intially
+              misinterpreted and have to be reinterpreted when more of the
+              sentence has been processed. By comparing object relative to
+              subject relative sentences that have been carefully constructed to
+              be as similar as possible, we can see at what point in reading the
+              sentence readers slow down, and use this information to infer
+              something about the underlying processing.</p>
+
+              <p>In a <a
+                  href="http://dx.doi.org/10.1016/j.cogpsych.2008.08.002">2008
+                  study</a>, Justine Wells and colleagues had participants
+              perform this task both before and after being exposed to lots of
+              relative clauses. In analyzing the reading time data they broke
+              the sentences up into four regions. The first comprised the first
+              five words (e.g., the reporter that attacked the/the reporter that
+              the senator), the second comprised of the first word which
+              indicates that the clause is actually object or subject relative
+              (e.g., senator/attacked), the third comprised of the main verb
+              (e.g., admitted/admitted), and the fourth comprising the remainder
+              of the sentence (e.g., the error/the error). We comparing the two
+              types of sentences, they found no differences at time point one,
+              and then slower reading times for all remaining time points for
+              the object relatives compared to the subject relatives.
+              How do you stack up?  Below you can see
+              your average response times for each of the sentence 
+              areas, or you can switch to viewing the original results
+              from Wells and colleagues' study by clicking the 'Study Data' button.</p>
+        
+
+                
+
+
+
+              <div id="controls">
+                  <span id="who"><button class="first active">Your Data</button><button class="last">Study Data</button></span>
+                  <span id="what"><button class="first last active">Response Time</button></span>
+              </div>
+      </div>
+      <div id="taskouter" style="margin: auto; display: none;">
+          <div id="taskvalign" style="display: table-cell; vertical-align: middle;">
+              <div id="task" style="font-family: monospace;">
+                  <p>The man with the hat shot the tree</p>
+                  <div id="task-controls" style="display: none;">
+                      <span id="task-resp"><button class="first">Yes</button><button class="last">No</button></span>
+                  </div>
+               </div>
+          </div>
+      </div>
+      <div id="chart">
+      </div>
+      <div class='results'>
+          <div id="ccontrols">
+              <span id="return"><button class="first last"
+                      onclick="window.location='../#relative'">Back to Overview</button></span>
+          </div>
+      </div>
+      <script type="text/javascript">
+
+var width = window.innerWidth*.8;
+    height = window.innerHeight*.8;
+
+var sentences = [{'type':'or','s':'The clerk that the typist trained told the truth','q':'Did the clerk tell the truth?','a':'Y'},
+{'type':'sr','s':'The clerk that trained the typist told the truth','q':'Did the clerk tell the truth?','a':'Y'},
+{'type':'or','s':'The spy that the governor supported spotted the enemy','q':'Did the spy spot the enemy?','a':'Y'},
+{'type':'sr','s':'The spy that supported the governor spotted the enemy','q':'Did the governor support the spy?','a':'N'},
+{'type':'sr','s':'The sailor that spotted the watchman waved his hand','q':'Did the watchman wave his hand?','a':'N'},
+{'type':'or','s':'The sailor that the watchman spotted waved his hand','q':'Did the sailor spot the watchman?','a':'N'},
+{'type':'sr','s':'The student that questioned the teacher raised his arm','q':'Did the student question the teacher?','a':'Y'},
+{'type':'or','s':'The student that the teacher questioned raised his arm','q':'Did the student question the teacher?','a':'N'},
+{'type':'sr','s':'The soldier that shot the civilian asked for forgiveness','q':'Did the civilian shot the soldier?','a':'N'},
+{'type':'or','s':'The soldier that the civilian shot asked for forgiveness','q':'Did the civilian ask for forgiveness?','a':'N'},
+{'type':'sr','s':'The fireman that saved the boy recieved a medal','q':'Did the fireman save the boy?','a':'Y'},
+{'type':'or','s':'The fireman that the boy saved recieved a medal','q':'Did the boy save the fireman?','a':'Y'},
+{'type':'sr','s':'The shopkeeper that helped the boy cleaned his shop','q':'Did the shopkeeper clean his shop?','a':'Y'},
+{'type':'or','s':'The shopkeeper that the boy helped cleaned his shop','q':'Did the boy clean his shop?','a':'N'},
+{'type':'sr','s':'The accountant that assisted the manager tallied the numbers','q':'Did the manager tally the numbers?','a':'N'},
+{'type':'sr','s':'The player that tackled the kicker celebrated by dancing','q':'Did the kicker tackle the player?','a':'N'},
+{'type':'or','s':'The player that the kicker tackled celebrated by dancing','q':'Did the kicker tackle the player','a':'Y'},
+{'type':'sr','s':'The musician that angered the conductor played some notes','q':'Did the musician play some notes?','a':'Y'},
+{'type':'or','s':'The musician that the conductor angered played some notes','q':'Did the musician anger the conductor?','a':'N'}];
+
+sentences = shuffle(sentences);
+
+var trial = 0;
+var word = 0;
+var resps = [];
+var rts = [];
+var trial_rts = [];
+var trial_resp = '';
+
+var started = false;
+var waiting_resp = false;
+var start, end;
+var newTrial = false;
+var endTrial = false;
+var runningTrial = false;
+
+var sentence = d3.select('#task p');
+sentence.style('font-size',(height*.05)+'px');
+
+d3.selectAll("#task-resp button")
+    .data(['Y','N'])
+    .on("click",function(w) {
+            endTrial=true;
+            trial_resp = w;
+            d3.select('#task-controls').style('display','none');
+            advance();
+    });
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .style('display','none')
+    .attr("width", width)
+    .attr("height", 50);
+
+add_progress('top');
+
+d3.select(window).on("keydown", function() {
+        switch (d3.event.keyCode) {
+          case 27: // Escape
+            trial = 1000;
+          case 32: // space
+            if (trial < sentences.length)
+            {
+                advance();
+            } else {
+                theEnd();
+            }
+            break;
+        }
+});
+
+function advance() {
+        if (!started) {
+            d3.select('#instructions').transition().duration(0).style('display','none');
+            d3.select('#taskouter').transition().duration(0).style('display','table')
+                .style('height',height+'px')
+                .style('width',w+'px').style('vertical-align','middle');
+            svg.transition().duration(0).style('display','inline');
+            started = true;
+            newTrial = true;
+        }
+
+        if (newTrial) {
+            trial_rts = [];
+            word = 0;
+            newTrial = false;
+            runningTrial = true;
+        }
+
+        if (runningTrial) {
+            if (word == 1) {
+                start = new Date().getTime();
+            }
+            if (word > 1) {
+                var prevStart = start;
+                start = new Date().getTime();
+                trial_rts.push(start-prevStart);
+            }
+            if (word > sentences[trial].s.split(' ').length) {
+                d3.select('#task-controls').style('display','block');
+                runningTrial = false;
+                sentence.text(sentences[trial].q)
+            } else {
+                sentence.text(dashify(sentences[trial].s,word++));
+            }
+        }
+
+        if (endTrial) {
+            rts.push(trial_rts);
+            resps.push(trial_resp);
+            if (trial_resp === sentences[trial].a) {
+                console.log('Correct');
+                sentence.text('Correct');
+            } else {
+                console.log('Incorrect');
+                sentence.text('Incorrect');
+            }
+
+            ++trial;
+            move_progress(trial,sentences.length);
+            newTrial = true;
+            endTrial = false;
+            if (trial < sentences.length)
+            {
+                setTimeout(function() {advance();},500);
+            } else {
+                setTimeout(function() {theEnd();},500);
+            }
+        }
+}
+
+var who = 'Subject';
+var what = 'RT';
+
+function theEnd() {
+    d3.select('#instructions').transition().duration(0).style('display','none');
+    d3.select('svg').transition().duration(0).style('display','inline');
+    computeStats();
+    remove_progress();
+    d3.select('#taskouter').transition().duration(0).style('display','none')
+    plotResults();
+    if (location.hash.substring(1)==='results') { 
+            who = 'Group';
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == 'Group'; })
+    }
+}
+
+// Results plotting
+
+var margins = [100, 100, 10, 100], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([-1,4]);
+var y = d3.scale.linear().range([h, 0]).domain([400,700]);
+var yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
+var yAxisGrid = d3.svg.axis().scale(y).ticks(4).tickSize(-w).orient("right");
+
+var bar_width = 100;
+
+var group_subrel_rts = [375, 389, 449, 367];
+var group_objrel_rts = [370, 426, 484, 387];
+var subj_subrel_rts = [0,0,0,0];
+var subj_objrel_rts = [0,0,0,0];
+
+
+var line = function() {};
+
+function computeStats() {
+   or_rts_1 = [];
+   or_rts_2 = [];
+   or_rts_3 = [];
+   or_rts_4 = [];
+   sr_rts_1 = [];
+   sr_rts_2 = [];
+   sr_rts_3 = [];
+   sr_rts_4 = [];
+
+    for (var j = 0; j < rts.length; j++)
+    {
+        if (sentences[j].type == 'or') {
+            or_rts_1 = or_rts_1.concat(rts[j].slice(1,5));
+            or_rts_2.push(rts[j][5]);
+            or_rts_3.push(rts[j][6]);
+            or_rts_4 = or_rts_4.concat(rts[j].slice(7,9));
+        } else {
+            sr_rts_1 = sr_rts_1.concat(rts[j].slice(1,5));
+            sr_rts_2.push(rts[j][5]);
+            sr_rts_3.push(rts[j][6]);
+            sr_rts_4 = sr_rts_4.concat(rts[j].slice(7,9));
+        }
+    }
+    subj_subrel_rts = [mean(sr_rts_1), mean(sr_rts_2), mean(sr_rts_3),mean(sr_rts_4)];
+    subj_objrel_rts = [mean(or_rts_1), mean(or_rts_2), mean(or_rts_3),mean(or_rts_4)];
+}
+
+function plotResults() {
+
+    svg.attr("height", height);
+
+    d3.selectAll('.results').style('display','block');
+
+    var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+    var groups = ['1','2','3','4'];
+    var or_groups = ['OR: Clerk that the typist','trained','told','the truth'];
+    var sr_groups = ['SR: Clerk that trained the','typist','told','the truth'];
+
+    y.domain([d3.min(subj_subrel_rts.concat(subj_objrel_rts))*.8,d3.max(subj_subrel_rts.concat(subj_objrel_rts))*1.2]);
+
+    plot.append('svg:rect').style('fill','steelblue').attr('width',10).attr('height',10)
+        .attr('x',.05*w)
+        .attr('y',.05*h);
+
+    plot.append('svg:circle').style('fill','#222').attr('r',5)
+        .attr('cx',.05*w+5)
+        .attr('cy',.05*h+25);
+
+    plot.append('svg:text')
+        .text('Object Relative').style('text-anchor','start')
+        .attr('transform','translate('+(.05*w+20)+','+(.05*h+12)+')');
+
+    plot.append('svg:text')
+        .text('Subject Relative').style('text-anchor','start')
+        .attr('transform','translate('+(.05*w+20)+','+(.05*h+30)+')');
+
+    plot.append("g")
+          .attr("class", "y grid")
+          .attr('transform','translate('+w+',0)')
+          .call(yAxisGrid);
+
+    plot.append('g').attr('id','data-bars');
+
+    plot.select('#data-bars').selectAll('.objrel_points').data(subj_objrel_rts).enter().append('svg:rect')
+                .classed('objrel_points',true)
+                .style('fill','steelblue')
+                .attr('width',10)
+                .attr('height',function(d) { return 10; })
+                .attr('x',function(d,i) { return x(i)-5; })
+                .attr('y',function(d) { return y(d)-5; });
+
+    line = d3.svg.line()
+                .x(function(d,i) { return x(i); }) 
+                .y(function(d) { return y(d); });
+
+    plot.select('#data-bars').append('svg:path')
+        .classed('objrel_lines',true)
+        .style('fill','none')
+        .style('stroke','steelblue')
+        .attr('d',line(subj_objrel_rts));
+
+    plot.select('#data-bars').selectAll('.subrel_points').data(subj_subrel_rts).enter().append('svg:circle')
+                .classed('subrel_points',true)
+                .attr('r',5)
+                .attr('cx',function(d,i) { return x(i); })
+                .attr('cy',function(d) { return y(d); });
+
+    plot.select('#data-bars').append('svg:path')
+        .classed('subrel_lines',true)
+        .style('fill','none')
+        .style('stroke','black')
+        .attr('d',line(subj_subrel_rts));
+
+    plot.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab')
+        .text('Mean Response Time (ms)').style('text-anchor','middle')
+        .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+    plot.append("g")
+          .attr("class", "x axis")
+          .append('svg:line')
+            .attr('x2',w)
+            .attr('y1',h)
+            .attr('y2',h);
+
+    plot.select('.x.axis').append('svg:text')
+        .text('Sentence Region').style('text-anchor','middle')
+        .attr('transform','translate('+(w/2)+','+(h+95)+') ');
+
+    plot.select('g.x.axis').selectAll('g.row-one').data(groups).enter().append('svg:g')
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .classed('row-one',true)
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',18)
+            .attr('dy',7);
+
+    plot.select('g.x.axis').selectAll('g.row-two').data(or_groups).enter().append('svg:g')
+        .classed('row-two',true)
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',38)
+            .attr('dy',7);
+
+    plot.select('g.x.axis').selectAll('g.row-three').data(sr_groups).enter().append('svg:g')
+        .classed('row-three',true)
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',60)
+            .attr('dy',7);
+
+    d3.selectAll("#who button")
+        .data(['Subject','Group'])
+        .on("click",function(w) {
+            who = w;
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == w; })
+        });
+
+    d3.selectAll("#what button")
+        .data(['RT'])
+        .on("click",function(w) {
+            what = w;
+            redraw(who,what);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == w; })
+        });
+}
+
+var ylab = 'Mean Response Time (ms)';
+function redraw(who,what) {
+
+    var prevYlab = ylab;
+    if (what == 'RT') {
+        var data_objrel = who == "Subject" ? subj_objrel_rts : group_objrel_rts;
+        var data_subrel = who == "Subject" ? subj_subrel_rts : group_subrel_rts;
+        ylab = 'Mean Response Time (ms)';
+    } else {
+        var data = who == "Subject" ? subj_errors : group_errors;
+        ylab = 'Mean Percent Error';
+    }
+
+    y.domain([d3.min(data_objrel.concat(data_subrel))*.8,d3.max(data_objrel.concat(data_subrel))*1.2]);
+    var plot = d3.select('#plot');
+
+    plot.selectAll('.objrel_points')
+        .data(data_objrel)
+      .transition().duration(1000)
+            .attr('x',function(d,i) { return x(i)-5; })
+            .attr('y',function(d) { return y(d)-5; });
+
+    plot.select('.objrel_lines')
+      .transition().duration(1000)
+        .attr('d',line(data_objrel));
+
+    plot.selectAll('.subrel_points')
+        .data(data_subrel)
+      .transition().duration(1000)
+            .attr('cx',function(d,i) { return x(i); })
+            .attr('cy',function(d) { return y(d); });
+
+    plot.select('.subrel_lines')
+      .transition().duration(1000)
+        .attr('d',line(data_subrel));
+
+    plot.select('.y.axis').transition().duration(1000).call(yAxis);
+    plot.select('.y.grid').transition().duration(1000).call(yAxisGrid);
+    if (prevYlab != ylab) {
+        plot.select('#ylab').transition().duration(500).style('opacity',0);
+        setTimeout( function() { plot.select('#ylab').text(ylab).transition().duration(500).style('opacity',1);},500);
+    }
+
+}
+
+
+function mean(array)
+{
+ var sum = 0, i;
+ for (i = 0; i < array.length; i++)
+ {
+  sum += array[i];
+ }
+  return array.length ? sum / array.length : 0;
+}
+
+function shuffle(array) {
+    var n = array.length, k, t;
+    if (n == 0) return false;
+    while (--n) {
+        k = Math.floor(Math.random() * (n+1));
+        t = array[n];
+        array[n] = array[k];
+        array[k] = t;
+    }
+    return array;
+}
+
+function dashify(s,w) {
+    w = w==null ? -1 : w-1;
+    var sentences = s.split(' ');
+    var newWords = Array(sentences.length);
+    for (var i = 0; i < sentences.length; i++)
+    {
+       newWords[i] = i == w ? sentences[i] : Array(sentences[i].length+1).join('‑');
+        // That is a unicode, non-breaking hyphen, not a normal hyphen
+    }
+    return newWords.join(' ');
+}
+
+if (location.hash.substring(1)==='results') { 
+    theEnd();
+}
+      </script>
+  </body>
+</html>

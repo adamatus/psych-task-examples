@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Language Comprehension</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="../../../css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../css/button.css"/>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+        #controls {
+            text-align: center;
+        }
+    </style>
+  </head>
+  <body>
+      <div class="results">
+          <h1>Language Comprehension</h1>
+
+          <p>How do we understand what is spoken to us or what we
+          read? Language comprehension is a process that we are all so
+          extremely skilled at that it is often difficult to think about how
+          it happens.  You read a sentence and immediately understand it,
+          or so it seems. But as with many things in life, the true story
+          is usually not a simple as it seems.  Researchers in a variety of
+          disciplines, from psychology and linguistics to computer science
+          and many more, have been trying for many years to understand
+          exactly how we understand language. This page discusses just a
+          few of the issues which researchers have explored, with an short
+          example experimental task for each that you can complete. These experiments
+          are designed to show you the methods that researchers use, as well
+          as to give some insight into how the data from these experiments
+          can inform our understanding of language comprehension.</p>
+
+          <p>The process of understanding language is often thought of as being
+          composed of several stages. When hearing or reading a sentence we
+          first have to identify the individual sounds and letters, then identify and
+          determine the meaning of the individual words, and finally analyze the
+          overall structure of the sentence to determine how the individual
+          words relate to one and other to determine the overall meaning of the
+          sentence. While it seems reasonable to conclude that this process
+          happens serially, with letters being identified first, then words, and
+          finally the sentence understood, there is increasing evidence that
+          this is not necessarily strictly the case. The meaning of a word can
+          help us identify an unclear sound or letter within the word, or
+          information from the sentence level can help to disambiguate
+          what is meant by a word with several meanings. This interaction
+          between the different stages of comprehension will be discussed in
+          more detail in relation to the specific experiments below.</p>
+
+          <p>The first two experiments below will address how we recognize
+          individual words, either spoken or written. We won't be addressing the
+          first step of comprehension, that of sound and letter recognition, but
+          you can get more information on those <a
+              href="http://en.wikipedia.org/wiki/Speech_perception">here</a> and
+          <a href="http://en.wikipedia.org/wiki/Reading_(process)">here</a>. The second two
+          experiments will address two different aspects about processing
+          sentences.</p> 
+
+          <a name="auditory"></a>
+          <h2>Auditory Word Recognition</h2>
+
+          <p>We are constantly surrounded by spoken language. Conversations with
+          friends, talk-radio, your favorite television show, they are all
+          filled with spoken language. How do we understand each of the words
+          when we hear them? First, it's important to realize that when we hear
+          a word, we do not hear it all at once, but spread out over time. Early
+          on in the word, we can't be sure of it's final meaning, because at
+          that point it could end up being several words. It's only after we
+          have finished hearing the spoken word that we can be sure of what word
+          it actually was.  But do we wait until the end of the word before we
+          ascribe meaning to it? Probably not.  Instead, we try to predict what
+          the word is going to be, based on what we've heard so far.</p>
+
+          <p>Once we've heard the word in it's entirety, we still might not
+          be sure of the actual meaning. Many, many words are ambiguous. The
+          word 'saw' could refer to the tool used to cut things, or to the
+          act of using one's eyes to view something. The experiment below
+          explores how this ambiguity in language affects the time it takes
+          to recognize individual words.</p>
+
+          <div id="controls">
+              <span id="auditory-word-rec"><button class="first">Run Experiment</button><button class="last">Jump to Results</button></span>
+          </div>
+
+          <a name="visual"></a>
+          <h2>Visual Word Recognition</h2>
+
+          <p>While recognizing written words seems like it should probably
+          be very similar to recognizing spoken words, there are important
+          differences. When we hear a work, the word enters our language
+          system one sound at a time. In contrast, when reading, we can
+          process the whole word at once. We don't need to incrementally
+          process each part of the word, because it is all there for us to
+          see in a single glance.</p>
+
+          <p>If this were truly the case, and we could immediately and
+          uniquely identify written words, we wouldn't expect the semantics,
+          or meaning, of the word to influence this process. We simply
+          see a word, and look up it's meaning, similar to how we use a
+          dictionary. But is this actually how the language system works?</p>
+
+          <p>One way to test this question is by having people read words
+          and make judgements about them, and vary how semantic information
+          can be applied when making those judgements. The experiment below
+          shows one example of how this can be tested. Click on the button
+          below to run through the experiment, or jump ahead to the results
+          to see a detailed explanation of why it doesn't seem to be quite
+          as simple as dictionary lookup!</p>
+
+          <div id="controls">
+              <span id="visual-word-rec"><button class="first">Run Experiment</button><button class="last">Jump to Results</button></span>
+          </div>
+
+          <a name="agree"></a>
+          <h2>Agreement</h2>
+
+          <p>Once we have identified the words in the sentence (or at least have
+          identified them well enough to give us a place to start) we can begin
+          to try to determine the overall idea being conveyed. Language is a
+          very complex thing and there are often many ways to say the same
+          thing:</p>
+
+          <ul><li>"The man painted the tree that fell"</li> 
+              <li>"The tree that fell was painted by the man"</li> 
+              <li>"The man painted the fallen tree"</li>
+          </ul>
+
+          <p>Given all the ways we can express an idea, as well as embed
+          ideas within other ideas, it is remarkable that we can understand
+          language at all. The language processing system has learned to
+          rely on many different cues to help in understanding what is
+          meant by a given sentence. One such cue that is used regularly
+          in many different ways is that of <em>agreement</em>. Language
+          has a variety of dependencies built in that helps disambiguate
+          complex sentences. One such agreement is that of gender between
+          nouns and pronouns. The phrase 'Adam tripped and then he fell'
+          follows the rules of gender agreement, 'Adam tripped and she fell'
+          does not (unless there is another person we are talking about who
+          also fell). Similarly, there are noun-verb agreement dependencies based
+          on whether the subject of the sentence is singular or plural:
+          'Adam tires of writing' makes sense, while 'Adam tire of writing'
+          does not (but 'Students tire of writing' would.)
+
+          <p>In order to use agreement to help disambiguate sentences,
+          we have to be able to track them. The experiment below looks at
+          how we are able to hold on to and track agreement while listening
+          to sentences.</p>
+
+          <div id="controls">
+              <span id="agreement"><button class="first">Run Experiment</button><button class="last">Jump to Results</button></span>
+          </div>
+
+          <a name="relative"></a>
+          <h2>Understanding Relative Clauses</h2>
+
+          <p>The last aspect of language processing that we will look at
+          why some sentences are harder to comprehend than others, even if they
+          appear superficially to be very similar (i.e., they are the same
+          number of words, with similar overall structure, etc.) A good example
+          of this phenomenon occurs with relative clauses, subclauses in a
+          sentence that modify a noun (show in italics below): </p>
+
+          <ul><li>"The reporter <em>that attacked the senator</em> admitted the error"</li> 
+                      <li>"The reporter <em>that the senator attacked</em> admitted the error"</li> 
+          </ul>
+
+          <p>Most people find the second sentence harder to read than the first.
+          Why might this be? The final experiment examines this phenomenon by
+          looking at the time it takes to read individual words in a
+          sentence.</p>
+
+          <div id="controls">
+              <span id="relative-clauses"><button class="first">Run Experiment</button><button class="last">Jump to Results</button></span>
+          </div>
+      </div>
+
+      <script type="text/javascript">
+
+var activateButtons = function(group) {
+    d3.selectAll("#"+group+" button")
+        .data(['task','results'])
+        .on("click",function(section) {
+                window.location = group+'/demo.html#'+section;
+        });
+};
+
+d3.selectAll('.results').style('display','block');
+
+activateButtons('auditory-word-rec');
+activateButtons('visual-word-rec');
+activateButtons('agreement');
+activateButtons('relative-clauses');
+      </script>
+  </body>
+</html>

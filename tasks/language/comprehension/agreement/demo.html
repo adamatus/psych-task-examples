@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Agreement</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="../../../../css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/button.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/chart.css"/>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../../libs/progress_bar.js"></script>
+  </head>
+  <body>
+      <div id="instructions">
+          <h1>Agreement</h1>
+          <p>During this experiment you will be verbally presented with a series of short
+          statements, one
+          at a time. Each statement will stop mid-sentence and a word will
+          appear on the screen that could continue the sentence. Immediately
+          upon reading the word, press the spacebar. You will next be asked
+          if the statement, as finished by the printed word, was a good
+          continuation of the sentence (i.e., was a grammatical next word).
+          Click 'Yes' or 'No' to indicate if the word was a good continuation.</p>
+
+          <ul>
+            <li>After reading the sentence continuing word, press Spacebar</li>
+            <li>Click 'Yes' or 'No' to answer if the word was a good
+            continuation of the sentence. </li>
+           </ul>
+
+           <p>Your response time (how quickly you read the
+           word) will be measured while you preform the task, so please try to read and respond quickly.</p>
+
+           <p>A bar running along the bottom of the screen will track your
+           progress. This experiment should take about two minutes to
+           complete.</p>
+
+           <p class="begin">This experiment requires sound.<br/> Be sure your
+           speakers or headphones are turned on and at an appropriate volume.</p>
+
+           <p class="begin">Press the spacebar when you are ready to begin!</p>
+      </div>
+      <div class="results">
+          <h1>Agreement</h1>
+              <h2>Results and Explanation</h1>
+
+              <p>This experiment was designed to examine sentence
+              comprehension, the process of understanding the meaning of an
+              entire sentence. In particular, it looked at the processing subject-verb number
+              agreement. This type of agreement has to be tracked as the
+              sentence unfolds, but can be used to help group subjects with
+              their appropriate verbs.</p>
+
+              <p>To test this, the experiment used a cross-modal naming task.
+              This task involves listening to a sentence fragment, then
+              immediately seeing a word that could continue this sentence,
+              speaking it out loud, and then indicating whether the word was a
+              good continuation or not. By varying whether the match is a good
+              match or not and whether the sentence fragment is short or long
+              (and thus requires remembering the number of the subject for a
+              short or a long period of time) we can look at how agreement plays
+              out in sentence comprehension. If people are actively keeping
+              track of the number of the subject, we would expect them to be
+              faster when the test word correctly matches the number of the
+              sentence noun compared to when it does not. Additionally, if the processing of agreement is
+              hard and relies heavily on memory, we might expect this difference
+              to disappear during long sentences, because the participants might
+              have forgotten the number of the subject by the time they finally
+              get to the verb.</p> 
+
+              <p>In a <a href="http://dx.doi.org/10.1080/01690960042000094">2001
+                  study</a>, Amit Almor and colleagues had healthy participants
+              as well as patients with Alzheimers disease perform this task.
+              While they did find a difference between the grammatical and
+              ungrammatical sentences (they <a
+                  href="http://en.wikipedia.org/wiki/Standard_score">z-scored</a>
+              the data to minimize the differences between individuals</a>), but
+          did not find reliable differences between the short and long
+          sentences, or between the healthy and Alzheimers groups.
+              How do you stack up?  Below you can see
+              your response time for each of the conditions, or you can switch to viewing the original results
+              from Almor and colleagues' study by clicking the 'Study Data' button.</p>
+
+              <div id="controls">
+                  <span id="who"><button class="first active">Your Data</button><button class="last">Study Data</button></span>
+                  <span id="what"><button class="first last active">Naming
+                         Latency</button></span>
+              </div>
+      </div>
+      <div id="taskouter" style="margin: auto; display: none;">
+          <div id="taskvalign" style="display: table-cell; vertical-align: middle;">
+              <div id="task" style="font-family: monospace;">
+                  <p>was</p>
+                  <div id="task-controls" style="display: none;">
+                      <span id="task-resp"><button class="first">Yes</button><button class="last">No</button></span>
+                  </div>
+               </div>
+          </div>
+      </div>
+      <div id="chart">
+      </div>
+      <div class='results'>
+          <div id="ccontrols">
+              <span id="return"><button class="first last"
+                      onclick="window.location='../#agree'">Back to Overview</button></span>
+          </div>
+      </div>
+      <script type="text/javascript">
+
+var width = window.innerWidth*.8;
+    height = window.innerHeight*.8;
+
+var margins = [100, 100, 10, 100], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([-.5,1.5]);
+var y = d3.scale.linear().range([h, 0]).domain([400,700]);
+var yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
+var yAxisGrid = d3.svg.axis().scale(y).ticks(4).tickSize(-w).orient("right");
+
+var bar_width = 100;
+
+var sentences = [{'type':'grammatical','l':'short','c':'was','t':'was','n':1},
+{'type':'grammatical','l':'short','c':'was','t':'was','n':2},
+{'type':'grammatical','l':'short','c':'was','t':'was','n':3},
+{'type':'grammatical','l':'short','c':'was','t':'was','n':4},
+{'type':'grammatical','l':'short','c':'was','t':'was','n':5},
+{'type':'ungrammatical','l':'long','c':'was','t':'were','n':6},     
+{'type':'ungrammatical','l':'long','c':'was','t':'were','n':7},     
+{'type':'ungrammatical','l':'long','c':'was','t':'were','n':8},     
+{'type':'ungrammatical','l':'long','c':'was','t':'were','n':9},     
+{'type':'ungrammatical','l':'long','c':'was','t':'were','n':10},     
+{'type':'grammatical','l':'short','c':'were','t':'were','n':11},
+{'type':'grammatical','l':'short','c':'were','t':'were','n':12},
+{'type':'grammatical','l':'short','c':'were','t':'were','n':13},
+{'type':'grammatical','l':'short','c':'were','t':'were','n':14},
+{'type':'grammatical','l':'short','c':'were','t':'were','n':15},
+{'type':'ungrammatical','l':'long','c':'were','t':'was','n':16},
+{'type':'ungrammatical','l':'long','c':'were','t':'was','n':17},
+{'type':'ungrammatical','l':'long','c':'were','t':'was','n':18},
+{'type':'ungrammatical','l':'long','c':'were','t':'was','n':19},
+{'type':'ungrammatical','l':'long','c':'were','t':'was','n':20}];
+
+sentences = shuffle(sentences);
+//words = words.slice(0,20);
+
+var trial = 0;
+var resps = [];
+var rts = [];
+
+var started = false;
+var waiting_resp = true;
+var start, end;
+
+var newtrial = true;
+var reading = false;
+var judgement = false;
+
+var audioEnd = function() {
+    reading = true;
+    console.log('AudioDone');
+    advance();
+}
+
+var sentence = d3.select('#task p');
+sentence.style('display','none');
+
+var a = d3.select('body').selectAll('audio')
+            .data(sentences)
+          .enter()
+            .append('audio')
+                .attr('id',function(d) { return 'audio-'+d.n; } )
+                .attr('preload','auto')
+                .attr('onended','audioEnd()')
+                .append('source')
+                .attr('src',function(d,i) { return 'sentence'+(i+1)+ '.ogg'; })
+                    .attr('type','audio/ogg');
+
+// Add trial question click handler                    
+d3.selectAll("#task-resp button")
+    .data(['Y','N'])
+    .on("click",function(w) {
+            endTrial=true;
+            trial_resp = w;
+            d3.select('#task-controls').style('display','none');
+            ++trial;
+            judgement = false;
+            newtrial = true;
+            resps.push(w);
+            if (trial < sentences.length)
+            {
+                advance();
+            } else {
+                theEnd();
+            }
+    });
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .style('display','none')
+    .attr("width", width)
+    .attr("height", 50);
+
+add_progress('top');
+
+d3.select(window).on("keydown", function() {
+        switch (d3.event.keyCode) {
+          case 27: // Escape
+            trial = 1000;
+                if (trial < sentences.length)
+                {
+                    advance();
+                } else {
+                    theEnd();
+                }
+                break;
+          case 32: // space
+            if (started) {
+                if (waiting_resp) {
+                    rts.push(new Date().getTime() - start);
+                    judgement = true;
+                    if (trial < sentences.length)
+                    {
+                        advance();
+                    } else {
+                        theEnd();
+                    }
+                }
+            } else {
+                advance();
+            }
+            break;
+        }
+});
+
+function advance() {
+        if (!started) {
+            d3.select('#instructions').transition().duration(0).style('display','none');
+            d3.select('#taskouter').transition().duration(0).style('display','table')
+                .style('height',height+'px')
+                .style('width',w+'px').style('vertical-align','middle');
+            d3.select('svg').transition().duration(0).style('display','inline');
+            started = true;
+            trial = 0;
+            waiting_resp = false;
+        }
+
+        if (newtrial) {
+            d3.select('#task-controls').style('display','none');
+            sentence.style('display','none');
+            move_progress(trial,sentences.length);
+            setTimeout(function() { EvalSound('audio-'+sentences[trial].n)} ,1000); 
+            newtrial = false;
+        }
+
+        if (reading) {
+            start = new Date().getTime();
+            waiting_resp = true;
+            reading = false;
+            sentence.text(sentences[trial].t).transition().duration(0).delay(0).style('display','block')
+                .transition().duration(0).delay(2000).style('display','block').each('end',function()
+                        { judgement = true; waiting_resp = false; rts.push(-1); advance(); } );
+        }
+
+        if (judgement) {
+            sentence.transition().delay(0).duration(0).style('display','block');
+            sentence.text('Was that word a good continuation of the statement?');
+            d3.select('#task-controls').style('display','block');
+        }
+}
+
+var who = 'Subject';
+var what = 'RT';
+
+function theEnd() {
+    d3.select('#instructions').transition().duration(0).style('display','none');
+    d3.select('svg').transition().duration(0).style('display','inline');
+    d3.select('#taskouter').transition().duration(0).style('display','none')
+    if (location.hash.substring(1)!=='results') { 
+        computeStats();
+    }
+    remove_progress();
+    plotResults();
+    if (location.hash.substring(1)==='results') { 
+            who = 'Group';
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == 'Group'; })
+    }
+}
+
+// Results plotting
+
+var group_gram_rts = [-0.2,-0.26];
+var group_ungram_rts = [0.46,0.09];
+var subj_gram_rts = [0,0];
+var subj_ungram_rts = [0,0];
+
+
+function computeStats() {
+    rts = zscore(rts);
+   types = ['short','long'];
+   mean_gram_rts = [];
+   for (var i = 0; i < types.length; i++)
+    {
+        var tmp_rts = [];
+        for (var j = 0; j < rts.length; j++)
+        {
+            if (sentences[j].l === types[i] & sentences[j].type === 'grammatical' ) {
+                tmp_rts.push(rts[j]);
+            }
+        }
+        mean_gram_rts.push(mean(tmp_rts));
+    }
+    subj_gram_rts = mean_gram_rts;
+
+   mean_ungram_rts = [];
+   for (var i = 0; i < types.length; i++)
+    {
+        var tmp_rts = [];
+        for (var j = 0; j < rts.length; j++)
+        {
+            if (sentences[j].l === types[i] & sentences[j].type === 'ungrammatical' ) {
+                tmp_rts.push(rts[j]);
+            }
+        }
+        mean_ungram_rts.push(mean(tmp_rts));
+    }
+    subj_ungram_rts = mean_ungram_rts;
+}
+
+function plotResults() {
+    svg.attr("height", height);
+
+    d3.selectAll('.results').style('display','block');
+
+    var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+    var groups = ['Short','Long'];
+
+    y.domain([d3.min(subj_gram_rts.concat(subj_ungram_rts))-.5,d3.max(subj_gram_rts.concat(subj_ungram_rts))+.5]);
+
+    plot.append("g")
+          .attr("class", "y grid")
+          .attr('transform','translate('+w+',0)')
+          .call(yAxisGrid);
+          
+    plot.append('svg:rect').style('fill','#444').attr('width',10).attr('height',10)
+        .attr('x',.05*w)
+        .attr('y',.05*h);
+        
+    plot.append('svg:rect').style('fill','#AAA').attr('width',10).attr('height',10)
+        .attr('x',.05*w)
+        .attr('y',.05*h+25);
+
+
+    plot.append('svg:text')
+        .text('Grammatical').style('text-anchor','start')
+        .attr('transform','translate('+(.05*w+20)+','+(.05*h+12)+')');
+
+    plot.append('svg:text')
+        .text('Ungrammatical').style('text-anchor','start')
+        .attr('transform','translate('+(.05*w+20)+','+(.05*h+30)+')');
+
+    plot.append('g').attr('id','data-bars');
+
+    plot.select('#data-bars').selectAll('.gram-bars').data(subj_gram_rts).enter().append('svg:rect')
+                .style('fill','#444')
+                .style('background-image','-webkit-linear-gradient(rgba(255,255,255,.25),rgba(255,255,255,.11))')
+                .classed('gram-bars',true)
+                .attr('width',bar_width)
+                .attr('height',function(d) { return Math.abs(y(d)-y(0)); })
+                .attr('x',function(d,i) { return x(i)-(bar_width); })
+                .attr('y',function(d) { return d > 0 ? y(d) : y(0); });
+
+    plot.select('#data-bars').selectAll('.ungram-bars').data(subj_ungram_rts).enter().append('svg:rect')
+                .classed('ungram-bars',true)
+                .style('fill','#AAA')
+                .attr('width',bar_width)
+                .attr('height',function(d) { return h-Math.abs(y(d)-y(0)); })
+                .attr('x',function(d,i) { return x(i); })
+                .attr('y',function(d) { return d > 0 ? y(d) : y(0); });
+
+    plot.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab')
+        .text('z-transformed Naming Latency').style('text-anchor','middle')
+        .attr('transform','translate(-85,'+(h/2)+') rotate(-90)');
+
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab2')
+        .text('<-- Faster ---|--- Slower -->').style('text-anchor','middle')
+        .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+    plot.append("g")
+          .attr("class", "x axis")
+          .append('svg:line')
+            .attr('x2',w)
+            .attr('y1',h)
+            .attr('y2',h);
+
+    plot.select('.x.axis').append('svg:text')
+        .text('Sentence Fragment Length').style('text-anchor','middle')
+        .attr('transform','translate('+(w/2)+','+(h+60)+') ');
+
+    plot.select('g.x.axis').selectAll('g').data(groups).enter().append('svg:g')
+        .attr('transform',function(d,i) { return 'translate('+x(i)+','+h+')'; })
+        .append('svg:text')
+            .text(function(d) { return d; })
+            .attr('y',18)
+            .attr('dy',7);
+
+    plot.append('svg:line')
+        .attr('id','zero-line')
+        .attr('class','x axis')
+        .attr('x1',0)
+        .attr('x2',w)
+        .attr('y1',y(0))
+        .attr('y2',y(0))
+        .style('stroke','black');
+
+    d3.selectAll("#who button")
+        .data(['Subject','Group'])
+        .on("click",function(w) {
+            who = w;
+            redraw(who,what);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == w; })
+        });
+
+    d3.selectAll("#what button")
+        .data(['RT'])
+        .on("click",function(w) {
+            what = w;
+            redraw(who,what);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == w; })
+        });
+}
+
+var ylab = 'z-transformed Naming Latency';
+
+function redraw(who,what) {
+
+    var prevYlab = ylab;
+    if (what == 'RT') {
+        var data_gram = who == "Subject" ? subj_gram_rts : group_gram_rts;
+        var data_ungram = who == "Subject" ? subj_ungram_rts : group_ungram_rts;
+        ylab = 'z-transformed Naming Latency';
+    } else {
+        var data_gram = who == "Subject" ? subj_errors : group_errors;
+        ylab = 'Mean Percent Error';
+    }
+
+    y.domain([d3.min(data_gram.concat(data_ungram))-.5,d3.max(data_gram.concat(data_ungram))+.5]);
+    var plot = d3.select('#plot');
+
+    plot.selectAll('.gram-bars')
+        .data(data_gram)
+      .transition()
+            .duration(1000)
+                .attr('height',function(d) { return Math.abs(y(d)-y(0)); })
+                .attr('x',function(d,i) { return x(i)-bar_width; })
+                .attr('y',function(d) { return d > 0 ? y(d) : y(0); });
+
+    plot.selectAll('.ungram-bars')
+        .data(data_ungram)
+      .transition()
+            .duration(1000)
+                .attr('height',function(d) { return Math.abs(y(d)-y(0)); })
+                .attr('x',function(d,i) { return x(i); })
+                .attr('y',function(d) { return d > 0 ? y(d) : y(0); });
+
+    plot.select('.y.axis').transition().duration(1000).call(yAxis);
+    plot.select('.y.grid').transition().duration(1000).call(yAxisGrid);
+
+    plot.select('#zero-line').transition().duration(1000)
+        .attr('y1',y(0))
+        .attr('y2',y(0));
+        
+    if (prevYlab != ylab) {
+        plot.select('#ylab').transition().duration(500).style('opacity',0);
+        setTimeout( function() { plot.select('#ylab').text(ylab).transition().duration(500).style('opacity',1);},500);
+    }
+}
+
+
+function mean(array)
+{
+ var sum = 0, i;
+ for (i = 0; i < array.length; i++)
+ {
+  sum += array[i];
+ }
+  return array.length ? sum / array.length : 0;
+}
+
+function shuffle(array) {
+    var n = array.length, k, t;
+    if (n == 0) return false;
+    while (--n) {
+        k = Math.floor(Math.random() * (n+1));
+        t = array[n];
+        array[n] = array[k];
+        array[k] = t;
+    }
+    return array;
+}
+
+function EvalSound(soundobj){
+   var thissound=document.getElementById(soundobj);
+   thissound.play();
+}
+
+if (location.hash.substring(1)==='results') { 
+    theEnd();
+}
+
+var stats = function(a){
+    var r = {mean: 0, variance: 0, deviation: 0}, t = a.length;
+    for(var m, s = 0, l = t; l--; s += a[l]);
+    for(m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
+    return r.deviation = Math.sqrt(r.variance = s / t), r;
+};
+
+var zscore = function(r) {
+    s = stats(r);
+    newr = [];
+    for (var i=0; i < r.length; i++)
+    {
+        newr.push((r[i]-s.mean)/s.deviation);
+    }
+    return newr;
+};
+
+        
+
+
+      </script>
+  </body>
+</html>
