@@ -1,0 +1,60 @@
+body {
+  text-align: center;
+}
+
+svg {
+} 
+
+#chart {
+    margin: auto;
+    margin-top: 20px;
+}
+
+text {
+    text-anchor: middle;
+}
+
+.axis, .grid {
+  shape-rendering: crispEdges;
+}
+
+.x.axis line {
+  stroke: #000;
+}
+
+.x.axis line.tick {
+    stroke: none;
+}
+
+.bars {
+    fill: steelblue;
+    stroke: #777;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.y.axis text {
+    text-anchor: end;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+.y.grid text, .y.grid path {
+    fill: none;
+    stroke: none;
+}
+
+.y.grid line {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+}

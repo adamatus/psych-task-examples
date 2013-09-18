@@ -1,0 +1,100 @@
+body {
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica;
+}
+
+ul {
+    text-align: left;
+    width: 90%;
+    margin: auto;
+}
+
+li { 
+    padding: .5em;
+    list-style-type: square;
+}
+
+.results ul {
+    list-style-position: inside;
+}
+
+.results li {
+    padding: 0;
+}
+
+#instructions {
+    width: 60%;
+    margin: auto;
+    text-align: left;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-indent: 0;
+}
+
+a {
+    color: steelblue;
+    text-decoration: none;
+}
+a:hover {
+    color: #AAA;
+    text-decoration: none;
+}
+
+p.begin {
+    text-align: center;
+    font-weight: bold;
+    margin: 2em;
+}
+
+.results {
+    text-align: justify;
+    text-indent: 2.5em;
+    display: none;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+#controls {
+    text-indent: 0;
+    text-align: left;
+    position: relative;
+    width: 100%;
+}
+
+#ccontrols {
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+#what {
+    position: absolute;
+    right: 0;
+}
+
+#return {
+    position: absolute;
+    right: 0;
+}
+
+#progress-bar .bg {
+    stroke: none;
+    fill: #ccc;
+}
+
+#progress-bar .progress {
+    stroke: none;
+    fill: steelblue;
+}
+
+#progress-bar .frame{
+    stroke: #555;
+    stroke-width: 2px;
+    fill: none;
+    shape-rendering: auto;
+}
