@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Psychology Experiment Examples</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="css/button.css"/>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+        body { padding: 0;
+               margin: 0; }
+
+        #controls {
+            text-align: center;
+        }
+
+        .results { display: block; }
+
+
+        /* CSS Github Fork Me Banner Copyright (c) 2012 Terrence Ryan
+           https://gist.github.com/tpryan/1679040 */
+ 
+        #banner{
+            height: 149px;
+            width: 149px;
+            overflow:hidden;
+            position: fixed;
+            right: 0;
+            top: 0;
+            left: auto;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #banner a{
+            
+            display: block;
+            width: 190px;
+            font-size: 14px;
+            font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", 
+                "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, 
+                Geneva, "Helvetica Neue", Helvetica, Arial, sans serif;
+            background-color: #333;
+            color: #FFF;
+            word-spacing: 2px;
+            text-decoration: none;
+            padding: 5px 15px 5px 25px;
+            
+            position:relative;
+            left: 20px;
+            top: -37px;
+            text-align: center;
+            
+            -moz-transform-origin: 0 0 ;
+            -moz-transform:rotate(45deg);
+            -moz-box-shadow:    1px 1px 5px 1px #666;
+            
+            -webkit-transform-origin: 0 0 ; 
+            -webkit-transform:rotate(45deg);
+            -webkit-box-shadow: 1px 1px 5px 1px #666;
+            
+            -ms-transform-origin: 0 0 ; 
+            -ms-transform:rotate(45deg);
+            -ms-box-shadow: 1px 1px 5px 1px #666;
+            
+            /*transform-origin: 0 0 ; 
+            transform:rotate(45deg);
+            box-shadow: 1px 1px 5px 1px #666; */
+            
+            background-image: linear-gradient(bottom, #000000 3%, #666666 5%, #000000 7%, #000000 93%, #666666 95%, #000000 97%);
+            background-image: -o-linear-gradient(bottom, #000000 3%, #666666 5%, #000000 7%, #000000 93%, #666666 95%, #000000 97%);
+            background-image: -moz-linear-gradient(bottom, #000000 3%, #666666 5%, #000000 7%, #000000 93%, #666666 95%, #000000 97%);
+            background-image: -webkit-linear-gradient(bottom, #000000 3%, #666666 5%, #000000 7%, #000000 93%, #666666 95%, #000000 97%);
+            background-image: -ms-linear-gradient(bottom, #000000 3%, #666666 5%, #000000 7%, #000000 93%, #666666 95%, #000000 97%);
+            
+            background-image: -webkit-gradient(
+                linear,
+                left bottom,
+                left top,
+                color-stop(0.03, #000000),
+                color-stop(0.05, #666666),
+                color-stop(0.07, #000000),
+                color-stop(0.93, #000000),
+                color-stop(0.95, #666666),
+                color-stop(0.97, #000000)
+            );  
+            
+        }
+    </style>
+  </head>
+  <body>
+    <div id="banner"><a href="http://www.github.com/adamatus/psych-task-examples/">Fork me on GitHub</a></div>
+
+      <div class="results">
+          <h1>Psychology Experiment Examples</h1>
+
+          <p>These days we know <a href="http://en.wikipedia.org/wiki/Outline_of_psychology">a lot</a> about human behavior and mental processing.  How did we come to learn so much?  Through carefully designed behavioral experiments.  To really appreciate these results of these experiments, it's often easiest to give the actual experiment a try. To that end we've created web-based recreations of some famous (and not-so-famous) behavioral tasks from experimental psychology.</p>
+
+          <p>Each example task attempts to follow the details specified in a particular published paper, although they are often shorted than the originals due to limited access to experimental stimuli. Each task tracks behavioral performance and will display a summary of your behavior at the end. We have also included the overall results from the original paper, so you can compare your behavior to that of the original population studied.</p>
+
+          <p>As Psychology is a massive field, we've broken the tasks into sub-fields and then highlighted the particular topic of interest within that sub-field. For a more detailed summary on any particular sub-field, click the header link.  Otherwise, jump straight to the experiment of interest to dive in!</p>
+
+          <h2>Memory</h2>
+
+          <h3>Short-Term Memory</h3>
+
+          <h4>Iconic Memory</h4>
+
+          <ul>
+              <li><a href="tasks/memory/sperling_1960">The partial report procedure of Sperling (1960)</a></li>
+          </ul>
+
+          <h2>Language</h2>
+
+          <h3><a href="tasks/language/comprehension/">Comprehension</a></h3>
+          
+          <h4>Word Recognition</h4>
+
+          <ul>
+              <li><a href="tasks/language/comprehension/visual-word-rec/demo.html">Visual Word Recognition</a></li>
+              <li><a href="tasks/language/comprehension/auditory-word-rec/demo.html">Auditory Word Recognition</a></li>
+          </ul>
+
+          <h4>Agreement</h4>
+
+          <ul>
+              <li><a href="tasks/language/comprehension/agreement/demo.html">Agreement</a></li>
+          </ul>
+
+          <h4>Relative Clause Comprehension</h4>
+
+          <ul>
+              <li><a href="tasks/language/comprehension/relative-clauses/demo.html">Relative Clause Comprehension</a></li>
+          </ul>
+      </div>
+  </body>
+</html>
