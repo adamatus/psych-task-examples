@@ -3,7 +3,11 @@
   <head>
     <title>Sperling's Partial Report Procedure (1960)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="../../../../css/page.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/button.css"/>
+    <link type="text/css" rel="stylesheet" href="../../../../css/chart.css"/>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../../libs/progress_bar.js"></script>
     <style>
 body {
     text-align: center;
@@ -24,6 +28,72 @@ svg {
     </style>
   </head>
   <body>
+
+      <div id="instructions">
+          <h1>Sperling's Partial Report Procedure (1960)</h1>
+          <p>During this experiment you will be visually presented with a visual 
+          array of letters and numbers for a very brief time. There will be
+          three rows of numbers, each with 4 characters. Remember as many of
+          these items as possible. Immediately after the 
+          presentation of the array, a tone will sound indicating the row from
+          which should report items.  Type all of the characters you remember
+          into the prompt and hit 'Enter'. A high tone (press '1' to hear it) means 
+          report the top row, a middle tone (press '2' to hear it) means report
+          the middle row, and a low tone (press '3' to hear it) means report
+          the bottom row.</p>
+
+          <ul>
+            <li>Press spacebar to start the trial</li>
+            <li>Memorize as many items as possible</li>
+            <li>Type in as many items you remember from the row indicated by the
+            tone</li>
+           </ul>
+
+           <p>A bar running along the bottom of the screen will track your
+           progress. This experiment should take about three minutes to
+           complete.</p>
+
+           <p class="begin">Press the spacebar when you are ready to begin!</p>
+      </div>
+
+      <div class="results">
+          <h1>Sperling's Partial Report Procedure (1960)</h1>
+
+              <h2>Results and Explanation</h1>
+
+
+              <p>This experiment was designed to examine how many visual items
+              can be remembered for short periods of time. In particular, this
+              task was designed to explore a very early type of memory refered
+              to as 'iconic memory'.</p>
+
+              <p>To test this, the experiment used a partial report procedure
+              first used by Sperling in 1960. The procedure relies on a
+              cue, a specific tone, that plays after the memory array is
+              off the screen.</p>
+    
+
+              <p>Below you can see
+              your average number of items recalled, and by inference, the size
+              of your iconic memory.  You can also switch to viewing the original results
+              from Sperling's study by clicking the 'Study Data' button.</p>
+
+              <div id="controls">
+                  <span id="who"><button class="first active">Your Data</button><button class="last">Study Data</button></span>
+                  <span id="what"><button class="first last active">Items
+                          Recalled</button></span>
+              </div>
+      </div>
+      <div id="taskouter" style="margin: auto; display: none;">
+          <div id="taskvalign" style="display: table-cell; vertical-align: middle;">
+              <div id="task" style="font-family: monospace;">
+                  <p>The man with the hat shot the tree</p>
+                  <div id="task-controls" style="display: none;">
+                      <span id="task-resp"><button class="first">Yes</button><button class="last">No</button></span>
+                  </div>
+               </div>
+          </div>
+      </div>
       <div id="chart">
       </div>
       <audio id="audio1" src="tone_250.wav" preload="auto" autobuffer></audio>
@@ -31,9 +101,9 @@ svg {
       <audio id="audio3" src="tone_2500.wav" preload="auto" autobuffer></audio>
       <script type="text/javascript">
 
-var margin = {top: 0, right: 0, bottom: 0, left: 0},
-    width = 1000;
-    height = 700;
+var margin = {top: 0, right: 0, bottom: 0, left: 0};
+var width = window.innerWidth*.8,
+    height = window.innerHeight*.8;
 
 var x = d3.scale.linear()
     .domain([1, 4])
