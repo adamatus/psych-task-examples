@@ -103,6 +103,8 @@ var y = d3.scale.linear()
     .range([100,height-100]);
 
 var trial = 0;
+var started = false;
+var nTrials = 20;
 var items_recalled = [];
 var stim = 'BCDFGHJKLMNPQRSTVWXZ123456789';
 
@@ -161,7 +163,10 @@ d3.select(window).on("keydown", function() {
       case 39: // right arrow
       case 32: // space
       case 34: { // page down
-          advance();
+        if (!started) {
+            start = true;
+            go();
+        }
       }
   //    case 37: // left arrow
   //    case 33: { // page up
@@ -305,9 +310,10 @@ function start() {
 };
 
 function theEnd() {
+    console.log('The End');
     d3.select('#instructions').transition().duration(0).style('display','none');
-    d3.select('svg').transition().duration(0).style('display','inline');
-    computeStats();
+    d3.select('svg').transition().duration(0).style('display','none');
+    //computeStats();
     remove_progress();
     plotResults();
 
@@ -319,6 +325,10 @@ function theEnd() {
     }
 }
 
+function plotResults() {
+
+    d3.selectAll('.results').style('display','block');
+}
 
 if (location.hash.substring(1)==='results') { 
     theEnd();
