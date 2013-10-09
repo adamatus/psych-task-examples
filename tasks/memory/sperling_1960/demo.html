@@ -7,6 +7,7 @@
     <link type="text/css" rel="stylesheet" href="../../../../css/button.css"/>
     <link type="text/css" rel="stylesheet" href="../../../../css/chart.css"/>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="../../../../libs/progress_bar.js"></script>
     <style>
 body {
@@ -112,6 +113,7 @@ var trial = 0;
 var started = false;
 var nTrials = 20;
 var items_recalled = [];
+var items_misrecalled = [];
 var stim = 'BCDFGHJKLMNPQRSTVWXZ123456789';
 
 var tokens = generateNewArray(stim,12);
@@ -166,6 +168,9 @@ function resize() {
 
 d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
+      case 27: // Escape
+            trial = 1000;
+            break;
       case 39: // right arrow
       case 32: // space
       case 34: { // page down
@@ -207,30 +212,55 @@ var runTrial = function() {
     cue = Math.ceil(Math.random()*3);
     setTimeout(function() {
         if (auditory) {
-          flashArrayWithAuditoryCue(150,cue);
+          flashArrayWithAuditoryCue(550,cue);
         } else if (visual) {
-          flashArrayWithVisualCue(150,cue);
+          flashArrayWithVisualCue(550,cue);
         } else {
-          flashArray(150);
+          flashArray(550);
         }
       },1000);
 
     setTimeout(function() { 
             resp = prompt("Enter items you remember from the cued row:","");
-            // FIXME Properly handle the response
-            console.log(resp);
-            move_progress(++trial,nTrials)
-            if (trial < nTrials) {
-                runTrial(); 
-            } else {
+            if (resp == null) {
+                // User hit cancel, jump to the end
                 theEnd();
+            } else {
+                // strip out unwanted characters from resp and convert to upper
+                resp = resp.split(',').join('').split('').join('').toUpperCase();
+                // get unique response items, in case they entered the same thing multiple times
+                var uniqueResps = [];
+                $.each(resp.split(''), function(i, el){
+                        if($.inArray(el, uniqueResps) === -1) uniqueResps.push(el);
+                        });
+
+                var hits = 0;
+                var fas = 0;
+                var targets = tokens.slice((cue-1)*4,cue*4);
+                for (var i=0; i < uniqueResps.length; i++) {
+                    if ($.inArray(uniqueResps[i],targets) === -1)
+                    {
+                        fas++;
+                    } else {
+                        hits++;
+                    }
+                }
+                items_recalled.push(hits);
+                items_misrecalled.push(fas);
+                
+                move_progress(++trial,nTrials)
+                if (trial < nTrials) {
+                    runTrial(); 
+                } else {
+                    theEnd();
+                }
             }
-            }, 1650);
+        }, 1650);
 }
 
 
 function newLetters() {
-    var tokens = generateNewArray(stim,12);
+    tokens = generateNewArray(stim,12);
     var letters = d3.select('#letter-array').selectAll('.letter')
         .data(tokens);
     letters.text(function(d) { return d; });
@@ -238,7 +268,7 @@ function newLetters() {
 
 function generateNewArray(stim,n) {
     var arr = []
-    var tokens = []
+    tokens = []
     while(arr.length < n){
       var randomnumber=Math.floor(Math.random()*(stim.length))
       var found=false;
@@ -306,7 +336,6 @@ function start() {
 };
 
 function theEnd() {
-    console.log('The End');
     d3.select('#instructions').transition().duration(0).style('display','none');
     d3.select('svg').transition().duration(0).style('display','none');
     //computeStats();
