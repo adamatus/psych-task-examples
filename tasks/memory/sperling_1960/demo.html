@@ -90,6 +90,12 @@ svg {
       <audio id="audio3" src="tone_2500.wav" preload="auto" autobuffer></audio>
       <script type="text/javascript">
 
+// FIXME Clean up text
+// FIXME Track results
+// FIXME Plot results
+// FIXME Lookup task specific details, implement them
+// FIXME Add non-original Sperling elements (visual cue, adjustable ISI)
+
 var margin = {top: 0, right: 0, bottom: 0, left: 0};
 var width = window.innerWidth*.8,
     height = window.innerHeight*.8;
@@ -168,19 +174,6 @@ d3.select(window).on("keydown", function() {
             go();
         }
       }
-  //    case 37: // left arrow
-  //    case 33: { // page up
-  //      navigateTo(curIndex - 1);
-  //      break;
-  //    }
-  //    case 36: { // home
-  //      navigateTo(0);
-  //      break;
-  //    }
-  //    case 35: { // end
-  //      navigateTo(slides.length-1);
-   //     break;
-   //   }
       case 49: // 1
       case 50: // 2
       case 51: { // 3
@@ -202,42 +195,45 @@ d3.select(window).on("keydown", function() {
       
 });
 
-var advance = function() {
-        if (!started) {
-            d3.select('#instructions').transition().duration(0).style('display','none');
-            d3.select('svg').transition().duration(0).style('display','inline');
-            started = true;
-        }
-        switch (count%3) {
-          case 0:
-            cue = Math.ceil(Math.random()*3);
-            if (auditory) {
-              flashArrayWithAuditoryCue(150,cue);
-            } else if (visual) {
-              flashArrayWithVisualCue(150,cue);
-            } else {
-              flashArray(150);
-            }
-            ++count;
-            break;
-          case 1:
-            displayArray();
-            ++count;
-            break;
-          case 2:
-            hideArray();
-            setTimeout('newLetters()',250);
-            ++count;
-            break;
-        }
+var go = function() {
+        d3.select('#instructions').transition().duration(0).style('display','none');
+        d3.select('svg').transition().duration(0).style('display','inline');
+        started = true;
+        runTrial();
 }
+
+var runTrial = function() {
+    newLetters();
+    cue = Math.ceil(Math.random()*3);
+    setTimeout(function() {
+        if (auditory) {
+          flashArrayWithAuditoryCue(150,cue);
+        } else if (visual) {
+          flashArrayWithVisualCue(150,cue);
+        } else {
+          flashArray(150);
+        }
+      },1000);
+
+    setTimeout(function() { 
+            resp = prompt("Enter items you remember from the cued row:","");
+            // FIXME Properly handle the response
+            console.log(resp);
+            move_progress(++trial,nTrials)
+            if (trial < nTrials) {
+                runTrial(); 
+            } else {
+                theEnd();
+            }
+            }, 1650);
+}
+
 
 function newLetters() {
     var tokens = generateNewArray(stim,12);
     var letters = d3.select('#letter-array').selectAll('.letter')
         .data(tokens);
     letters.text(function(d) { return d; });
-    
 }
 
 function generateNewArray(stim,n) {
