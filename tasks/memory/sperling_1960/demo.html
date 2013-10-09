@@ -325,8 +325,7 @@ function hideArray() {
 }
 
 function EvalSound(soundobj){
-   var thissound=document.getElementById(soundobj);
-   thissound.play();
+   $('#'+soundobj)[0].play();
 }
    
 function start() {
